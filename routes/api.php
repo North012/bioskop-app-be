@@ -43,6 +43,7 @@ Route::prefix('film')->group(function() {
     Route::get('/{id}', [FilmController::class, 'show']);
     Route::post('/store', [FilmController::class, 'store']);
     Route::post('/update/{id}', [FilmController::class, 'update']);
+    Route::post('/updateStatus/{id}', [FilmController::class, 'updateStatus']);
     Route::delete('destroy/{id}', [FilmController::class, 'destroy']);
     
 });

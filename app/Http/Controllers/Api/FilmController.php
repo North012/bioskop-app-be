@@ -163,6 +163,25 @@ class FilmController extends Controller
         return new MasterResource(true, 'Data berhasil diubah!', $film);
     }
 
+    public function updateStatus(Request $request, string $id)
+    {
+        $film = Film::findOrFail($id);
+        
+        if ($film['status'] == 'unavailable') {
+            $film->update([
+                'status'    => 'available'
+            ]);
+
+        } else {
+            $film->update([
+                'status'    => 'unavailable'
+            ]);
+        }
+
+        return new MasterResource(true, 'Status berhasil diubah!', $film);
+
+    }
+
     public function destroy(String $id)
     {
         $film = Film::findOrFail($id);
