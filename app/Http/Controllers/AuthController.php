@@ -28,7 +28,7 @@ class AuthController extends Controller
             'email'     => $validate['email'],
             'password'  => Hash::make($validate['password']),
             'phone_number' => '-',
-            'role'  => 'admin',
+            'role'  => 'customer',
         ]);
 
         return response()->json(['message' => 'User registered successfully']);
