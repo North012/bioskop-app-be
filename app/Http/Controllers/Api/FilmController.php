@@ -57,6 +57,7 @@ class FilmController extends Controller
                     'theaters' => $theaters,
                 ];
             })
+            ->where('date', today()->toDateString())
             ->values();
 
         return response()->json([
@@ -177,7 +178,6 @@ class FilmController extends Controller
                 'status'    => 'unavailable'
             ]);
         }
-
         return new MasterResource(true, 'Status berhasil diubah!', $film);
 
     }
