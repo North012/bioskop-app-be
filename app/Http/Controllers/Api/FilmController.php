@@ -195,4 +195,54 @@ class FilmController extends Controller
 
         return new MasterResource(true, 'Data berhasi dihapus', null);
     }
+
+    public function searchDate(Request $request, $id)
+    {
+        $selectedDate = $request->date ?? today()->toDateString();
+
+        $film = Film::with(['schedule.studio.theater'])->findOrFail($id);
+
+        $schedules = $film->schedule
+            ->groupBy('date')
+            ->map(function ($scheduleByDate) {
+
+                $theaters = $scheduleByDate
+                    ->groupBy(fn($s) => $s->studio->theater->id)
+                    ->map(function ($items) {
+
+                        $theater = $items->first()->studio->theater;
+
+                        return [
+                            'theater_name' => $theater->name,
+                            'theater_address' => $theater->address,
+                            'times' => $items
+                                ->sortBy(fn($item) => strtotime($item->time))
+                                ->map(fn($item) => [
+                                    'id'   => $item->id,
+                                    'time' => $item->time,
+                                ])
+                                ->values(),
+                        ];
+                    })
+                    ->values();
+
+                return [
+                    'date'     => $scheduleByDate->first()->date,
+                    'theaters' => $theaters,
+                ];
+            })
+            ->where('date', $selectedDate) // 🔥 pakai tanggal dari request
+            ->values();
+
+        return response()->json([
+            'id'          => $film->id,
+            'title'       => $film->title,
+            'description' => $film->description,
+            'duration'    => $film->duration,
+            'category'    => $film->category,
+            'image'       => $film->image,
+            'trailer'     => $film->trailer,
+            'schedules'   => $schedules
+        ]);
+    }         
 }
