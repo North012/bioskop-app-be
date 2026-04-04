@@ -45,7 +45,7 @@ Route::prefix('film')->group(function() {
     Route::post('/update/{id}', [FilmController::class, 'update']);
     Route::post('/updateStatus/{id}', [FilmController::class, 'updateStatus']);
     Route::delete('destroy/{id}', [FilmController::class, 'destroy']);
-    Route::get('/searh-date/{id}', [FilmController::class, 'searchDate']);
+    Route::get('/search-date/{id}', [FilmController::class, 'searchDate']);
     
 });
 
